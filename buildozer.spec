@@ -33,7 +33,6 @@ android.permissions = INTERNET
 
 # Android Config (stable versions)
 
-android.sdk = 33
 android.api = 31
 android.minapi = 21
 android.ndk = 25b
