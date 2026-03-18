@@ -25,14 +25,6 @@ jobs:
             zlib1g-dev libncurses5-dev libffi-dev libssl-dev \
             cmake build-essential
 
-      - name: Fix libtool issue
-        run: |
-          libtoolize --force
-          aclocal
-          autoheader
-          automake --add-missing
-          autoconf
-
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
