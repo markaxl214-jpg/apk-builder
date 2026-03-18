@@ -33,10 +33,10 @@ android.permissions = INTERNET
 
 # Android Config (stable versions)
 
+android.sdk = 33
 android.api = 31
 android.minapi = 21
-android.ndk = 23b
-android.sdk = 24
+android.ndk = 25b
 android.build_tools = 33.0.2
 
 # Entry point
