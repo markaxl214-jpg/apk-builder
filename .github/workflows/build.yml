@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,17 +34,21 @@ jobs:
           unzip commandlinetools-linux-11076708_latest.zip
           mv cmdline-tools latest
 
-      - name: Set SDK environment variables
+      - name: Fix sdkmanager path (IMPORTANT)
+        run: |
+          mkdir -p $HOME/android-sdk/tools/bin
+          ln -s $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager $HOME/android-sdk/tools/bin/sdkmanager
+
+      - name: Set SDK path
         run: |
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_MANAGER=$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" >> $GITHUB_ENV
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
       - name: Install Android build tools
         run: |
-          yes | $ANDROID_SDK_MANAGER --licenses
-          $ANDROID_SDK_MANAGER "platform-tools" "platforms;android-31" "build-tools;33.0.2"
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-31" "build-tools;33.0.2"
 
       - name: Fix Buildozer SDK path
         run: |
