@@ -3,17 +3,15 @@ from kivy.lang import Builder
 
 KV = """
 MDScreen:
-    md_bg_color: 0.1, 0.1, 0.15, 1   # Dark background
+    md_bg_color: 0.1, 0.1, 0.15, 1
 
     MDBoxLayout:
         orientation: "vertical"
-        padding: "20dp"
-        spacing: "20dp"
-        padding: "29dp","90dp","40dp","0dp"
+        padding: "15dp"
+        spacing: "15dp"
 
-        # 🔹 Display Card
         MDCard:
-            radius: [20,]
+            radius: [20]
             elevation: 8
             size_hint_y: None
             height: "100dp"
@@ -22,102 +20,76 @@ MDScreen:
                 id: display
                 text: "0"
                 halign: "right"
-                valign: "center"
-                font_style: "H3"
-                theme_text_color: "Primary"
-                text_size: self.size
-                padding: "0dp","0dp","10dp","0dp"
+                font_style: "H4"
+                padding: "10dp"
 
-        # 🔹 Buttons Grid
         GridLayout:
             cols: 4
-            spacing: "15dp"
-            padding: "0dp","120dp","0dp","0dp"
+            spacing: "10dp"
 
-            # Row 1
-            MDRaisedButton:
-                on_release: app.clear_display()
-                text: "C"
-
-            MDRaisedButton:
-                on_release: app.cut_display()
-                text: "Del"
-
-            MDRaisedButton:
-                on_release: app.add_value("(")
-                text: "("
-
-            MDRaisedButton:
-                on_release: app.add_value(")")
-                text: ")"
-
-            MDRaisedButton:
-                on_release: app.add_value("/")
-                text: "/"
-
-            # Row 2
-            MDRaisedButton:
-                on_release: app.add_value("7")
+            MDFlatButton:
                 text: "7"
+                on_release: app.add("7")
 
-            MDRaisedButton:
-                on_release: app.add_value("8")
+            MDFlatButton:
                 text: "8"
+                on_release: app.add("8")
 
-            MDRaisedButton:
-                on_release: app.add_value("9")
+            MDFlatButton:
                 text: "9"
+                on_release: app.add("9")
 
-            MDRaisedButton:
-                on_release: app.add_value("*")
-                text: "*"
+            MDFlatButton:
+                text: "/"
+                on_release: app.add("/")
 
-            # Row 3
-            MDRaisedButton:
-                on_release: app.add_value("4")
+            MDFlatButton:
                 text: "4"
+                on_release: app.add("4")
 
-            MDRaisedButton:
-                on_release: app.add_value("5")
+            MDFlatButton:
                 text: "5"
+                on_release: app.add("5")
 
-            MDRaisedButton:
-                on_release: app.add_value("6")
+            MDFlatButton:
                 text: "6"
+                on_release: app.add("6")
 
-            MDRaisedButton:
-                on_release: app.add_value("-")
-                text: "-"
+            MDFlatButton:
+                text: "*"
+                on_release: app.add("*")
 
-            # Row 4
-            MDRaisedButton:
-                on_release: app.add_value("1")
+            MDFlatButton:
                 text: "1"
+                on_release: app.add("1")
 
-            MDRaisedButton:
-                on_release: app.add_value("2")
+            MDFlatButton:
                 text: "2"
+                on_release: app.add("2")
 
-            MDRaisedButton:
-                on_release: app.add_value("3")
+            MDFlatButton:
                 text: "3"
+                on_release: app.add("3")
 
-            MDRaisedButton:
-                on_release: app.add_value("+")
-                text: "+"
+            MDFlatButton:
+                text: "-"
+                on_release: app.add("-")
 
-            # Last Row
-            MDRaisedButton:
-                on_release: app.add_value("0")
+            MDFlatButton:
                 text: "0"
+                on_release: app.add("0")
 
-            MDRaisedButton:
-                on_release: app.add_value(".")
+            MDFlatButton:
                 text: "."
+                on_release: app.add(".")
 
-            MDRaisedButton:
-                on_release: app.calculate()
+            MDFlatButton:
                 text: "="
+                on_release: app.calculate()
+
+            MDFlatButton:
+                text: "+"
+                on_release: app.add("+")
 """
 
 class CalculatorApp(MDApp):
@@ -127,27 +99,17 @@ class CalculatorApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         return Builder.load_string(KV)
 
-    def add_value(self, value):
+    def add(self, value):
         if self.root.ids.display.text == "0":
             self.root.ids.display.text = value
         else:
             self.root.ids.display.text += value
 
-    def clear_display(self):
-        self.root.ids.display.text = "0"
-
-    def cut_display(self):
-        text = self.root.ids.display.text
-        if len(text) > 1:
-            self.root.ids.display.text = text[:-1]
-        else:
-            self.root.ids.display.text = "0"
-
     def calculate(self):
         try:
-            expression = self.root.ids.display.text
-            result = str(eval(expression))
+            result = str(eval(self.root.ids.display.text))
             self.root.ids.display.text = result
         except:
             self.root.ids.display.text = "Error"
+
 CalculatorApp().run()
