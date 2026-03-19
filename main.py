@@ -1,115 +1,52 @@
-from kivymd.app import MDApp
-from kivy.lang import Builder
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
 
-KV = """
-MDScreen:
-    md_bg_color: 0.1, 0.1, 0.15, 1
+class Calculator(GridLayout):
 
-    MDBoxLayout:
-        orientation: "vertical"
-        padding: "15dp"
-        spacing: "15dp"
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.cols = 4
 
-        MDCard:
-            radius: [20]
-            elevation: 8
-            size_hint_y: None
-            height: "100dp"
+        self.display = TextInput(
+            text='0',
+            font_size=32,
+            readonly=True,
+            halign="right",
+            size_hint=(1, 0.2)
+        )
+        self.add_widget(self.display)
 
-            MDLabel:
-                id: display
-                text: "0"
-                halign: "right"
-                font_style: "H4"
-                padding: "10dp"
+        buttons = [
+            '7','8','9','/',
+            '4','5','6','*',
+            '1','2','3','-',
+            '0','.','=','+'
+        ]
 
-        GridLayout:
-            cols: 4
-            spacing: "10dp"
+        for btn in buttons:
+            self.add_widget(Button(text=btn, on_press=self.on_button_click))
 
-            MDFlatButton:
-                text: "7"
-                on_release: app.add("7")
+    def on_button_click(self, instance):
+        text = instance.text
 
-            MDFlatButton:
-                text: "8"
-                on_release: app.add("8")
+        if text == "=":
+            try:
+                self.display.text = str(eval(self.display.text))
+            except:
+                self.display.text = "Error"
 
-            MDFlatButton:
-                text: "9"
-                on_release: app.add("9")
-
-            MDFlatButton:
-                text: "/"
-                on_release: app.add("/")
-
-            MDFlatButton:
-                text: "4"
-                on_release: app.add("4")
-
-            MDFlatButton:
-                text: "5"
-                on_release: app.add("5")
-
-            MDFlatButton:
-                text: "6"
-                on_release: app.add("6")
-
-            MDFlatButton:
-                text: "*"
-                on_release: app.add("*")
-
-            MDFlatButton:
-                text: "1"
-                on_release: app.add("1")
-
-            MDFlatButton:
-                text: "2"
-                on_release: app.add("2")
-
-            MDFlatButton:
-                text: "3"
-                on_release: app.add("3")
-
-            MDFlatButton:
-                text: "-"
-                on_release: app.add("-")
-
-            MDFlatButton:
-                text: "0"
-                on_release: app.add("0")
-
-            MDFlatButton:
-                text: "."
-                on_release: app.add(".")
-
-            MDFlatButton:
-                text: "="
-                on_release: app.calculate()
-
-            MDFlatButton:
-                text: "+"
-                on_release: app.add("+")
-"""
-
-class CalculatorApp(MDApp):
-
-    def build(self):
-        self.theme_cls.primary_palette = "DeepPurple"
-        self.theme_cls.theme_style = "Dark"
-        return Builder.load_string(KV)
-
-    def add(self, value):
-        if self.root.ids.display.text == "0":
-            self.root.ids.display.text = value
         else:
-            self.root.ids.display.text += value
+            if self.display.text == "0":
+                self.display.text = text
+            else:
+                self.display.text += text
 
-    def calculate(self):
-        try:
-            result = str(eval(self.root.ids.display.text))
-            self.root.ids.display.text = result
-        except:
-            self.root.ids.display.text = "Error"
+
+class CalculatorApp(App):
+    def build(self):
+        return Calculator()
+
 
 CalculatorApp().run()
