@@ -30,7 +30,6 @@ jobs:
           pip install --upgrade pip
           pip install "cython==0.29.33" buildozer
           pip install cython==0.29.33 buildozer
-          pip install kivymd
 
       - name: Install Android SDK
         run: |
